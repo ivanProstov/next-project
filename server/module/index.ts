@@ -1,21 +1,21 @@
-import {UsersInRestAdapter} from "./users/users.in.rest.adapter";
-import {Express} from "express";
-import {IServiceInRestAdapter} from "@/server/module/interface";
+import { UsersInRestAdapter } from "./users/users.in.rest.adapter";
+import { Express } from "express";
+import { IServiceInRestAdapter } from "@/server/module/interface";
 
+const serviceAdapters: IServiceInRestAdapter<any>[] = [
+  new UsersInRestAdapter(),
+];
 
-const serviceAdapters: IServiceInRestAdapter<any>[] = [new UsersInRestAdapter()]
-
-export const initializeEndpoints = (services: IServiceInRestAdapter<any>[]) =>  (server: Express) => {
+export const initializeEndpoints =
+  (services: IServiceInRestAdapter<any>[]) => (server: Express) => {
     services.map(async (service) => {
-       const init = await service.init();
-       const baseUrl = `/api/${service.basePath}/`
-       return init.map((elem) => {
-            // @ts-ignore
-            server[elem.method](`${baseUrl}${elem.url}`, service[elem.fn])
-        })
+      const init = await service.init();
+      const baseUrl = `/api/${service.basePath}/`;
+      return init.map((elem) => {
+        // @ts-ignore
+        server[elem.method](`${baseUrl}${elem.url}`, service[elem.fn]);
+      });
+    });
+  };
 
-    })
-}
-
-
-export const setupServer = initializeEndpoints (serviceAdapters)
+export const setupServer = initializeEndpoints(serviceAdapters);

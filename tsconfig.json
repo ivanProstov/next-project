@@ -1,35 +1,25 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noEmit": false,
     "moduleResolution": "node",
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "strict": true,
     "outDir": "./build",
     "incremental": false,
     "module": "commonjs",
     "target": "ES2022",
-    "rootDirs": [
-      "./"
-    ],
+    "rootDirs": ["./"],
     "isolatedModules": true,
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "downlevelIteration": true,
     "strictFunctionTypes": false,
-    "types": [
-      "node",
-    ],
+    "types": ["node"],
     "sourceMap": true,
     "allowJs": true,
     "allowUnreachableCode": true,
@@ -45,12 +35,6 @@
     "resolveJsonModule": true,
     "strictPropertyInitialization": false
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

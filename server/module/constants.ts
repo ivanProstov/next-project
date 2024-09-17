@@ -1,11 +1,11 @@
 export enum Method {
-    GET = "get",
-    POST = "post",
-    PUT = "put",
-    DELETE = "delete",
-    PATCH = "patch",
+  GET = "get",
+  POST = "post",
+  PUT = "put",
+  DELETE = "delete",
+  PATCH = "patch",
 }
 
 export enum ServicesName {
-    USERS = "users",
+  USERS = "users",
 }
