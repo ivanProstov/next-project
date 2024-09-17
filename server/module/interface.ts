@@ -9,4 +9,5 @@ export interface IEndpointConfig<T> {
 export interface IServiceInRestAdapter<T> {
   init: () => Promise<IEndpointConfig<T>[]>;
   basePath: ServicesName;
+  notAuthorized?: boolean;
 }

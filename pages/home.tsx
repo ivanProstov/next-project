@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [data, setData] = useState<{ id: string; user: string } | null>(null);
+  const [data, setData] = useState<{
+    id: string;
+    user: string;
+    users: any[];
+  } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("useEffect");
-    fetch("api/user", {
+    fetch("/api/authorized/users/get", {
       method: "GET",
       headers: {
         "x-custom-header": "fetch",
@@ -31,6 +34,12 @@ export default function Home() {
         <>
           <div>userId: {data?.id || ""}</div>
           <div>userId: {data?.user || ""}</div>
+          <div>
+            users:
+            {(data?.users || []).map((user: any) => (
+              <div key={user._id}>{JSON.stringify(user, null, "\t")}</div>
+            ))}
+          </div>
         </>
       )}
     </div>

@@ -9,7 +9,7 @@ import { startMiddlewarets } from "./middleware/startMiddlewarets";
 import { middlewareAuthAPI } from "./middleware/middlewareAuthAPI";
 import { middlewareLoginRedirect } from "./middleware/middlewareLoginRedirect";
 import { middlewareAuth } from "./middleware/middlewareAuth";
-import { nameUsersInHeaders } from "../utils/constants";
+import { authorizedPath, nameUsersInHeaders } from "../utils/constants";
 import { setupServer } from "./module";
 
 const dev = process.env.NODE_ENV !== "production";
@@ -36,7 +36,10 @@ app.prepare().then(async () => {
 
   server.use((req: Request, res: Response, next: NextFunction) => {
     if (req.path.startsWith("/api")) {
-      startMiddlewarets(blockBrowserAccess, middlewareAuthAPI)(req, res, next);
+      startMiddlewarets(blockBrowserAccess)(req, res, next);
+    }
+    if (req.path.startsWith(`/api/${authorizedPath}`)) {
+      startMiddlewarets(middlewareAuthAPI)(req, res, next);
     }
     next();
   });
@@ -54,33 +57,33 @@ app.prepare().then(async () => {
 
   // server.post
 
-  server.get("/api/user", async (req: Request, res: Response) => {
-    const user = req.get(nameUsersInHeaders);
-    console.log("user 111 >>> ", user);
-    // const users =  await User.find();
-    // console.log("users >>> ", users)
-    res.status(200).json(JSON.parse(user || ""));
-  });
+  // server.get("/api/user", async (req: Request, res: Response) => {
+  //   const user = req.get(nameUsersInHeaders);
+  //   console.log("user 111 >>> ", user);
+  //   // const users =  await User.find();
+  //   // console.log("users >>> ", users)
+  //   res.status(200).json(JSON.parse(user || ""));
+  // });
 
-  server.post("/api/users", async (req, res) => {
-    try {
-      const { name, email } = req.body;
-      const newUser = new User({ name, email });
-      await newUser.save();
-      res.status(201).json(newUser);
-    } catch (error) {
-      res.status(500).json({ error: "Error creating user" });
-    }
-  });
+  // server.post("/api/users", async (req, res) => {
+  //   try {
+  //     const { name, email } = req.body;
+  //     const newUser = new User({ name, email });
+  //     await newUser.save();
+  //     res.status(201).json(newUser);
+  //   } catch (error) {
+  //     res.status(500).json({ error: "Error creating user" });
+  //   }
+  // });
 
-  server.get("/api/users", async (req, res) => {
-    try {
-      const users = await User.find();
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error: "Error fetching users" });
-    }
-  });
+  // server.get("/api/users", async (req, res) => {
+  //   try {
+  //     const users = await User.find();
+  //     res.status(200).json(users);
+  //   } catch (error) {
+  //     res.status(500).json({ error: "Error fetching users" });
+  //   }
+  // });
 
   // Ваш кастомный код здесь
   // server.use((req: any, res: any, next: any) => {
