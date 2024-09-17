@@ -1,21 +1,56 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "noEmit": false,
+    "moduleResolution": "node",
     "jsx": "preserve",
-    "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": [
+        "./*"
+      ]
+    },
+    "strict": true,
+    "outDir": "./build",
+    "incremental": false,
+    "module": "commonjs",
+    "target": "ES2022",
+    "rootDirs": [
+      "./"
+    ],
+    "isolatedModules": true,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "downlevelIteration": true,
+    "strictFunctionTypes": false,
+    "types": [
+      "node",
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "allowUnreachableCode": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
