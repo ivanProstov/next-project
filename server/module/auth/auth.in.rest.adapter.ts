@@ -1,13 +1,12 @@
 import { IEndpointConfig, IServiceInRestAdapter } from "../interface";
 import { Method, ServicesName } from "../constants";
 import { Request, Response } from "express";
-import User from "../../models/users/users";
-import { UsersInRestAdapter } from "../users/users.in.rest.adapter";
+import { UsersService } from "../users/users.service";
 
 export class AuthInRestAdapter
   implements IServiceInRestAdapter<AuthInRestAdapter>
 {
-  constructor(private readonly usersInRestAdapter: UsersInRestAdapter) {}
+  constructor(private readonly usersService: UsersService) {}
 
   public notAuthorized: boolean = true;
   public basePath = ServicesName.AUTH;
@@ -19,11 +18,8 @@ export class AuthInRestAdapter
   public async registration(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
-      const newUser = new User({ name, email, password });
-
-      await newUser.save();
-      res.status(201).json(newUser);
-      return newUser;
+      const user = await this.usersService.createUser(name, email, password);
+      res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: "Error registration" });
     }

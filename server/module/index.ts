@@ -3,9 +3,10 @@ import { Express } from "express";
 import { IServiceInRestAdapter } from "@/server/module/interface";
 import { authorizedPath } from "../../utils/constants";
 import { AuthInRestAdapter } from "./auth/auth.in.rest.adapter";
+import { UsersService } from "./users/users.service";
 
-const usersInRestAdapter = new UsersInRestAdapter();
-const authInRestAdapter = new AuthInRestAdapter(usersInRestAdapter);
+const usersInRestAdapter = new UsersInRestAdapter(new UsersService());
+const authInRestAdapter = new AuthInRestAdapter(new UsersService());
 
 const serviceAdapters: IServiceInRestAdapter<any>[] = [
   usersInRestAdapter,
@@ -14,19 +15,18 @@ const serviceAdapters: IServiceInRestAdapter<any>[] = [
 
 export const initializeEndpoints =
   (services: IServiceInRestAdapter<any>[]) => (server: Express) => {
-    // console.log("services >>> ", services);
     services.map(async (service) => {
       const init = await service.init();
-      // console.log("service >>> ", service);
       const isAuthorized = !service.notAuthorized ? `${authorizedPath}/` : "";
 
       const baseUrl = `/api/${isAuthorized}${service.basePath}/`;
 
-      return init.map((elem) => {
-        // console.log("`${baseUrl}${elem.url}` >>> ", `${baseUrl}${elem.url}`);
-        // @ts-ignore
-        server[elem.method](`${baseUrl}${elem.url}`, service[elem.fn]);
-      });
+      return init.map((elem) =>
+        server[elem.method](
+          `${baseUrl}${elem.url}`,
+          (service as any)[elem.fn].bind(service),
+        ),
+      );
     });
   };
 
