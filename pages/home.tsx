@@ -24,8 +24,6 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
-  console.log("data >>> ", data);
-
   return (
     <div>
       <div>home page</div>

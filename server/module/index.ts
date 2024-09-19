@@ -4,9 +4,15 @@ import { IServiceInRestAdapter } from "@/server/module/interface";
 import { authorizedPath } from "../../utils/constants";
 import { AuthInRestAdapter } from "./auth/auth.in.rest.adapter";
 import { UsersService } from "./users/users.service";
+import { CryptoService } from "./crypto/crypto.service";
 
-const usersInRestAdapter = new UsersInRestAdapter(new UsersService());
-const authInRestAdapter = new AuthInRestAdapter(new UsersService());
+const cryptoService = new CryptoService();
+const usersInRestAdapter = new UsersInRestAdapter(
+  new UsersService(cryptoService),
+);
+const authInRestAdapter = new AuthInRestAdapter(
+  new UsersService(cryptoService),
+);
 
 const serviceAdapters: IServiceInRestAdapter<any>[] = [
   usersInRestAdapter,
