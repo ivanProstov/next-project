@@ -24,9 +24,24 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  const onClickBtn = () => {
+    fetch("/api/authorized/users/getSession", {
+      method: "GET",
+      headers: {
+        "x-custom-header": "fetch",
+      },
+    }).then((response) => {
+      console.log("response >>> ", response);
+      return response.json();
+    });
+  };
+
   return (
     <div>
       <div>home page</div>
+
+      <button onClick={onClickBtn}> click </button>
+
       {loading && <div>...</div>}
       {!loading && (
         <>

@@ -5,8 +5,8 @@ export const middlewareAuthAPI = (
   res: Response,
   next: NextFunction,
 ) => {
-  const accessToken = req.cookies.accessToken;
-  console.log("accessToken >>> ", accessToken);
+  // @ts-ignore
+  const accessToken = req.session.userId;
   if (!accessToken) {
     return res.status(401).json({ error: "Unauthorized" });
   }

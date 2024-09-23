@@ -12,6 +12,7 @@ const usersInRestAdapter = new UsersInRestAdapter(
 );
 const authInRestAdapter = new AuthInRestAdapter(
   new UsersService(cryptoService),
+  cryptoService,
 );
 
 const serviceAdapters: IServiceInRestAdapter<any>[] = [

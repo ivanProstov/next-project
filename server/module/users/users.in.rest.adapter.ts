@@ -16,6 +16,7 @@ export class UsersInRestAdapter
     return [
       { url: "get", method: Method.GET, fn: "getUsers" },
       { url: "create", method: Method.POST, fn: "createUser" },
+      { url: "getSession", method: Method.GET, fn: "getSession" },
     ];
   }
 
@@ -25,6 +26,12 @@ export class UsersInRestAdapter
     res.status(200).json({ ...JSON.parse(user || ""), method: "get", users });
   };
 
+  public getUser = async (req: Request, res: Response) => {
+    // @ts-ignore
+    const userId = req.session.userId;
+    return await this.usersService.getUserByIdOrError(userId);
+  };
+
   public async createUser(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
@@ -32,6 +39,19 @@ export class UsersInRestAdapter
       res.status(201).json(newUser);
     } catch (error) {
       res.status(500).json({ error: "Error creating user" });
+    }
+  }
+
+  public async getSession(req: Request, res: Response) {
+    // @ts-ignore
+    if (req.session.userId) {
+      const user = await this.usersService.getUserByIdOrError(
+        // @ts-ignore
+        req.session.userId,
+      );
+      res.status(200).json(user);
+    } else {
+      res.status(401).json({ message: "Not authenticated" });
     }
   }
 }
