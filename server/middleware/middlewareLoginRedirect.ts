@@ -7,7 +7,9 @@ export function middlewareLoginRedirect(
   res: Response,
   next: NextFunction,
 ) {
-  const accessToken = request.cookies[nameAccessToken];
+  // const accessToken = request.cookies[nameAccessToken];
+  // @ts-ignore
+  const accessToken = req.session.userId;
   if (request.path === "/login") {
     if (accessToken) {
       return res.redirect(Path.HOME);
