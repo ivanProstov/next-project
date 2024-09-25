@@ -3,6 +3,7 @@ import { Method, ServicesName } from "../constants";
 import { Request, Response } from "express";
 import { UsersService } from "../users/users.service";
 import { CryptoService } from "../crypto/crypto.service";
+import { nameAccessToken } from "../../../utils/constants";
 
 export class AuthInRestAdapter
   implements IServiceInRestAdapter<AuthInRestAdapter>
@@ -19,6 +20,7 @@ export class AuthInRestAdapter
     return [
       { url: "registration", method: Method.POST, fn: "registration" },
       { url: "login", method: Method.POST, fn: "login" },
+      { url: "logout", method: Method.POST, fn: "logout" },
     ];
   }
 
@@ -49,7 +51,7 @@ export class AuthInRestAdapter
             .status(500)
             .json({ message: "Session regeneration failed" });
         }
-        // @ts-ignore
+
         req.session.userId = user._id;
         req.session.cookie.maxAge = isRememberMe
           ? 7 * 24 * 60 * 60 * 1000
@@ -61,5 +63,14 @@ export class AuthInRestAdapter
     } catch (error) {
       return res.status(500).json({ error: "authorization error" });
     }
+  }
+  public async logout(req: Request, res: Response) {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.clearCookie(nameAccessToken); // Удаляем cookie сессии
+      return res.status(200).json({ message: "Logout successful" });
+    });
   }
 }

@@ -1,4 +1,5 @@
 import { Method, ServicesName } from "./constants";
+import { Request } from "express";
 
 export interface IEndpointConfig<T> {
   method: Method;

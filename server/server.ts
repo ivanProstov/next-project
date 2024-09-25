@@ -11,6 +11,7 @@ import { authorizedPath, nameAccessToken } from "../utils/constants";
 import MongoStore from "connect-mongo";
 import { setupServer } from "./module";
 import session from "express-session";
+import { blockBrowserAccess } from "./middleware/blockBrowserAccess";
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
@@ -53,9 +54,9 @@ app.prepare().then(async () => {
   server.use(cookieParser());
 
   server.use((req: Request, res: Response, next: NextFunction) => {
-    // if (req.path.startsWith("/api")) {
-    //   startMiddlewarets(blockBrowserAccess)(req, res, next);
-    // }
+    if (req.path.startsWith("/api")) {
+      startMiddlewarets(blockBrowserAccess)(req, res, next);
+    }
     if (req.path.startsWith(`/api/${authorizedPath}`)) {
       startMiddlewarets(middlewareAuthAPI)(req, res, next);
     }

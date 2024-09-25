@@ -27,9 +27,8 @@ export class UsersInRestAdapter
   };
 
   public getUser = async (req: Request, res: Response) => {
-    // @ts-ignore
     const userId = req.session.userId;
-    return await this.usersService.getUserByIdOrError(userId);
+    return await this.usersService.getUserByIdOrError(userId || "");
   };
 
   public async createUser(req: Request, res: Response) {

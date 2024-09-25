@@ -21,7 +21,7 @@ export function middlewareAuth(
 }
 
 // Функция для проверки аутентификации
-function checkAuth(request: Request, token: RequestCookie | undefined) {
+function checkAuth(request: Request, token?: string | undefined) {
   const publicPaths = routes.map(({ path }) => path);
   // Ваша логика проверки аутентификации
   if (publicPaths.includes(request.path) && !token) {

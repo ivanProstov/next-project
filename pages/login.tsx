@@ -1,9 +1,13 @@
+import { useRouter } from "next/router";
+
 export default function Login() {
+  const { push } = useRouter();
   const onClickBtn = () => {
     fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-custom-header": "fetch",
       },
       body: JSON.stringify({
         email: "test@mail.com",
@@ -19,6 +23,7 @@ export default function Login() {
       })
       .then((data) => {
         console.log("Success:", data);
+        push("/home");
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
