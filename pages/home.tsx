@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState<{
@@ -9,10 +8,8 @@ export default function Home() {
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { push } = useRouter();
-
   useEffect(() => {
-    fetch("/api/authorized/users/get", {
+    fetch("/api/authorized/users/getUsers", {
       method: "GET",
       headers: {
         "x-custom-header": "fetch",
@@ -28,38 +25,24 @@ export default function Home() {
   }, []);
 
   const onClickBtn = () => {
-    fetch("/api/authorized/users/getSession", {
+    fetch("/api/authorized/users/get", {
       method: "GET",
       headers: {
         "x-custom-header": "fetch",
       },
-    }).then((response) => {
-      console.log("response >>> ", response);
-      return response.json();
-    });
+    })
+      .then((response) => {
+        console.log("response >>> ", response);
+        return response.json();
+      })
+      .then((data) => console.log("data >>> ", data));
   };
-
-  const onLogout = useCallback(() => {
-    fetch("/api/auth/logout", {
-      method: "POST",
-      headers: {
-        "x-custom-header": "fetch",
-      },
-    }).then((response) => {
-      console.log("response >>> ", response);
-
-      // return response.json();
-      push("/login");
-    });
-  }, []);
 
   return (
     <div>
       <div>home page</div>
 
       <button onClick={onClickBtn}> click </button>
-
-      <button onClick={onLogout}> logout </button>
 
       {loading && <div>...</div>}
       {!loading && (

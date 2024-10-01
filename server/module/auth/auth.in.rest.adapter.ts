@@ -57,7 +57,6 @@ export class AuthInRestAdapter
           ? 7 * 24 * 60 * 60 * 1000
           : 60 * 60 * 1000; // Устанавливаем время жизни сессии
 
-        console.log("req.session222 >>> ", req.session);
         return res.status(200).json({ message: "Login successful" });
       });
     } catch (error) {

@@ -14,9 +14,9 @@ export class UsersInRestAdapter
 
   public async init(): Promise<IEndpointConfig<UsersInRestAdapter>[]> {
     return [
-      { url: "get", method: Method.GET, fn: "getUsers" },
+      { url: "get", method: Method.GET, fn: "getUser" },
       { url: "create", method: Method.POST, fn: "createUser" },
-      { url: "getSession", method: Method.GET, fn: "getSession" },
+      { url: "getUsers", method: Method.GET, fn: "getUsers" },
     ];
   }
 
@@ -27,8 +27,13 @@ export class UsersInRestAdapter
   };
 
   public getUser = async (req: Request, res: Response) => {
-    const userId = req.session.userId;
-    return await this.usersService.getUserByIdOrError(userId || "");
+    try {
+      const userId = req.session.userId;
+      const user = await this.usersService.getUserByIdOrError(userId || "");
+      res.status(200).json(user);
+    } catch {
+      res.status(401).json({ message: "Not authenticated" });
+    }
   };
 
   public async createUser(req: Request, res: Response) {
@@ -41,16 +46,14 @@ export class UsersInRestAdapter
     }
   }
 
-  public async getSession(req: Request, res: Response) {
-    // @ts-ignore
-    if (req.session.userId) {
-      const user = await this.usersService.getUserByIdOrError(
-        // @ts-ignore
-        req.session.userId,
-      );
-      res.status(200).json(user);
-    } else {
-      res.status(401).json({ message: "Not authenticated" });
-    }
-  }
+  // public async getSession(req: Request, res: Response) {
+  //   if (req.session.userId) {
+  //     const user = await this.usersService.getUserByIdOrError(
+  //       req.session.userId,
+  //     );
+  //     res.status(200).json(user);
+  //   } else {
+  //     res.status(401).json({ message: "Not authenticated" });
+  //   }
+  // }
 }
