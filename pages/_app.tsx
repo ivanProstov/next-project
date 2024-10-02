@@ -3,6 +3,8 @@ import type { AppProps } from "next/app";
 import { authorizedPath } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { Header } from "@/src/client/components/header";
+import "antd/dist/reset.css";
+import { ConfigProvider } from "antd";
 
 const getUser = () => {
   return fetch(`/api/${authorizedPath}/users/get`, {
@@ -26,10 +28,26 @@ export default function App({ Component, pageProps }: AppProps) {
   console.log("user >>> ", user);
 
   return (
-    <div>
-      {!!user?._id && <Header />}
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#01939A",
+          borderRadius: 5,
+          fontSize: 16,
+          fontWeightStrong: 700,
+        },
+        components: {
+          Input: {
+            paddingBlockLG: 10,
+          },
+        },
+      }}
+    >
+      <div>
+        {!!user?._id && <Header />}
 
-      <Component {...pageProps} />
-    </div>
+        <Component {...pageProps} />
+      </div>
+    </ConfigProvider>
   );
 }

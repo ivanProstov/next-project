@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "antd";
 
 export default function Home() {
   const [data, setData] = useState<{
@@ -41,8 +42,11 @@ export default function Home() {
   return (
     <div>
       <div>home page</div>
-
-      <button onClick={onClickBtn}> click </button>
+      <div style={{ margin: "5px" }}>
+        <Button onClick={onClickBtn} type="primary">
+          Click Me
+        </Button>
+      </div>
 
       {loading && <div>...</div>}
       {!loading && (

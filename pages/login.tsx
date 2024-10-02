@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { Login as LoginComponents } from "../src/client/pages/login";
 
 export default function Login() {
   const { push } = useRouter();
@@ -30,10 +31,5 @@ export default function Login() {
       });
   };
 
-  return (
-    <div>
-      <div>login</div>
-      <button onClick={onClickBtn}> login </button>
-    </div>
-  );
+  return <LoginComponents />;
 }
