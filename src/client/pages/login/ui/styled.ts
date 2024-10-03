@@ -21,7 +21,20 @@ const FormFooter = styled.div`
   justify-content: space-between;
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  & > .error {
+    position: absolute;
+    bottom: 100%;
+    transform: translateY(10px);
+  }
+  & > .input {
+    margin-top: 12px;
+  }
+`;
+
 export const SC = {
   FormWrapper,
   FormFooter,
+  InputWrapper,
 };

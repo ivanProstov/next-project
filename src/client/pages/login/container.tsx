@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Typography } from "antd";
+import { Button, Checkbox, Input, notification, Typography } from "antd";
 import { SC } from "./ui/styled";
 import {
   EyeInvisibleOutlined,
@@ -6,78 +6,129 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { useForm, Controller } from "react-hook-form";
+import { IFormInputs } from "./interfaces";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useValidationSchema } from "./lib/hooks/useValidationSchema";
+import { openNotification } from "@/src/client/common/util/notification";
+import { useCallback } from "react";
 export const Login = () => {
-  const { Title } = Typography;
+  const { Title, Text } = Typography;
 
-  // TODO: временное решение
-  const [login, setLogin] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const schema = useValidationSchema();
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<IFormInputs>({
+    defaultValues: {
+      email: undefined,
+      password: undefined,
+      rememberMe: false,
+    },
+    resolver: yupResolver(schema),
+  });
 
   const { push } = useRouter();
-  const onClickBtn = () => {
-    fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-custom-header": "fetch",
-      },
-      body: JSON.stringify({
-        email: login,
-        password: password,
-        isRememberMe: rememberMe,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+
+  const onClickBtn = useCallback(
+    (value: IFormInputs) => {
+      fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-custom-header": "fetch",
+        },
+        body: JSON.stringify(value),
       })
-      .then((data) => {
-        console.log("Success:", data);
-        push("/home");
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Success:", data);
+          push("/home");
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          openNotification("error", "Login error", error.message || "");
+        });
+    },
+    [openNotification],
+  );
 
   return (
     <SC.FormWrapper>
       <Title level={1}>Login</Title>
-      <form>
+      <form onSubmit={handleSubmit(onClickBtn)}>
         <div>
-          <Input
-            size="large"
-            placeholder="default size"
-            prefix={<UserOutlined />}
-            onChange={(e) => setLogin(e.target.value)}
-            value={login}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => {
+              return (
+                <SC.InputWrapper>
+                  <Text type="danger" className="error">
+                    {errors?.email?.message}
+                  </Text>
+                  <Input
+                    className="input"
+                    status={(errors?.email?.message && "error") || ""}
+                    size="large"
+                    placeholder="email"
+                    prefix={<UserOutlined />}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                </SC.InputWrapper>
+              );
+            }}
           />
         </div>
         <div>
-          <Input.Password
-            size="large"
-            placeholder="input password"
-            iconRender={(visible) =>
-              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-            }
-            prefix={<LockOutlined />}
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => {
+              return (
+                <SC.InputWrapper>
+                  <Text type="danger" className="error">
+                    {errors?.password?.message}
+                  </Text>
+                  <Input.Password
+                    className="input"
+                    size="large"
+                    status={(errors?.password?.message && "error") || ""}
+                    placeholder="password"
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                    prefix={<LockOutlined />}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                </SC.InputWrapper>
+              );
+            }}
           />
         </div>
         <SC.FormFooter>
-          <Checkbox
-            onChange={(e) => setRememberMe(e.target.checked)}
-            checked={rememberMe}
-          >
-            Remember me
-          </Checkbox>
-          <Button onClick={onClickBtn} type="primary">
+          <Controller
+            name="rememberMe"
+            control={control}
+            render={({ field }) => {
+              return (
+                <Checkbox onChange={field.onChange} checked={field.value}>
+                  Remember me
+                </Checkbox>
+              );
+            }}
+          />
+          <Button htmlType="submit" type="primary">
             Click Me
           </Button>
         </SC.FormFooter>
