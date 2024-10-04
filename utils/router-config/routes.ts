@@ -1,6 +1,8 @@
 const formatPath = () => {
   const HOME = "/home";
   const ABOUT = "/about";
+  // const LOGIN = "/login";
+  // const REGISTRATION = "/registration";
   return {
     HOME,
     ABOUT,
@@ -8,6 +10,17 @@ const formatPath = () => {
 };
 
 export const Path = formatPath();
+
+// export const routesNoAuth = [
+//   {
+//     title: "Login",
+//     path: Path.LOGIN,
+//   },
+//   {
+//     title: "Registration",
+//     path: Path.REGISTRATION,
+//   },
+// ];
 
 export const routes = [
   {

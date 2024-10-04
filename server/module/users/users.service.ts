@@ -5,9 +5,20 @@ import { IUser } from "../../models/users/interface";
 export class UsersService {
   constructor(private cryptoService: CryptoService) {}
 
-  public async createUser(name: string, email: string, password: string) {
+  // public async;
+  public async createUser({
+    name,
+    email,
+    password,
+    token,
+  }: {
+    name?: string;
+    email: string;
+    password: string;
+    token?: string;
+  }) {
     const cryptoPassword = await this.cryptoService.hashPassword(password);
-    const newUser = new User({ name, email, password: cryptoPassword });
+    const newUser = new User({ name, email, password: cryptoPassword, token });
     await newUser.save();
     return newUser;
   }

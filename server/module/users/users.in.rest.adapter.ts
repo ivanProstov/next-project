@@ -38,8 +38,13 @@ export class UsersInRestAdapter
 
   public async createUser(req: Request, res: Response) {
     try {
-      const { name, email, password } = req.body;
-      const newUser = await this.usersService.createUser(name, email, password);
+      const { name, email, password, token } = req.body;
+      const newUser = await this.usersService.createUser({
+        name,
+        email,
+        password,
+        token,
+      });
       res.status(201).json(newUser);
     } catch (error) {
       res.status(500).json({ error: "Error creating user" });

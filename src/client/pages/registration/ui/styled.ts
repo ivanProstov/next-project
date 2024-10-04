@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { widthFormLogin } from "@/utils/constants";
+import { SmileOutlined } from "@ant-design/icons";
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -16,15 +17,6 @@ const FormWrapper = styled.div`
     flex-direction: column;
     gap: 15px;
   }
-  a {
-    font-size: 18px;
-  }
-`;
-
-const FormFooter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 const InputWrapper = styled.div`
@@ -39,28 +31,42 @@ const InputWrapper = styled.div`
   }
 `;
 
-const Footer = styled.div`
+const ContentPosition = styled.div<{ position?: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: ${({ position }) => position || "center"};
+`;
+
+const FormFooter = styled(ContentPosition)`
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
   width: ${widthFormLogin};
   padding-top: 15px;
+  padding-bottom: 15px;
   margin-top: 15px;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  display: flex;
-  gap: 0 10px;
-  justify-content: space-between;
+  position: relative;
+  //box-shadow: 2px -4px 9px rgba(0, 0, 0, 0);
+  //transition: box-shadow 0.5s ease;
+  //&:hover {
+  //  box-shadow: 2px -4px 9px rgba(0, 0, 0, 0.2);
+  //  transition: box-shadow 0.5s ease;
+  //}
+`;
+
+const Icon = styled(SmileOutlined)`
+  svg {
+    fill: #01939a;
+  }
 `;
 
 const SpinWrapper = styled.div`
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
 `;
 
 export const SC = {
   FormWrapper,
-  FormFooter,
   InputWrapper,
-  Footer,
+  ContentPosition,
+  FormFooter,
+  Icon,
   SpinWrapper,
 };

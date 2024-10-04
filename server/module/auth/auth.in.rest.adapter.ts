@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { UsersService } from "../users/users.service";
 import { CryptoService } from "../crypto/crypto.service";
 import { nameAccessToken } from "../../../utils/constants";
+import { AuthService } from "./auth.service";
 
 export class AuthInRestAdapter
   implements IServiceInRestAdapter<AuthInRestAdapter>
@@ -11,6 +12,7 @@ export class AuthInRestAdapter
   constructor(
     private readonly usersService: UsersService,
     private readonly cryptoService: CryptoService,
+    public readonly authService: AuthService,
   ) {}
 
   public notAuthorized: boolean = true;
@@ -21,13 +23,28 @@ export class AuthInRestAdapter
       { url: "registration", method: Method.POST, fn: "registration" },
       { url: "login", method: Method.POST, fn: "login" },
       { url: "logout", method: Method.POST, fn: "logout" },
+      { url: "invite", method: Method.POST, fn: "invite" },
     ];
+  }
+
+  public async invite(req: Request<{ email: string }>, res: Response) {
+    try {
+      const { email } = req.body;
+      await this.authService.invite(email);
+      res.status(201).json(true);
+    } catch (error) {
+      res.status(500).json({ error: "Error invite" });
+    }
   }
 
   public async registration(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
-      const user = await this.usersService.createUser(name, email, password);
+      const user = await this.usersService.createUser({
+        name,
+        email,
+        password,
+      });
       res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: "Error registration" });
