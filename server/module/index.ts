@@ -6,10 +6,17 @@ import { AuthInRestAdapter } from "./auth/auth.in.rest.adapter";
 import { UsersService } from "./users/users.service";
 import { CryptoService } from "./crypto/crypto.service";
 import { AuthService } from "./auth/auth.service";
+import { MailerService } from "./mailer/mailer.service";
+import { JwtService } from "./jwt/jwt.service";
 
 const cryptoService = new CryptoService();
 const usersService = new UsersService(cryptoService);
-const authService = new AuthService(usersService, cryptoService);
+const authService = new AuthService(
+  usersService,
+  cryptoService,
+  new MailerService(),
+  new JwtService(),
+);
 const usersInRestAdapter = new UsersInRestAdapter(usersService);
 
 const authInRestAdapter = new AuthInRestAdapter(

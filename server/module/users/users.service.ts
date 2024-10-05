@@ -5,7 +5,6 @@ import { IUser } from "../../models/users/interface";
 export class UsersService {
   constructor(private cryptoService: CryptoService) {}
 
-  // public async;
   public async createUser({
     name,
     email,
@@ -21,6 +20,19 @@ export class UsersService {
     const newUser = new User({ name, email, password: cryptoPassword, token });
     await newUser.save();
     return newUser;
+  }
+
+  public async updateUser({
+    id,
+    ...data
+  }: {
+    id: string;
+    name?: string;
+    email: string;
+    password: string;
+    token?: string;
+  }) {
+    return User.findByIdAndUpdate(id, data, { new: true });
   }
 
   public async getUserById(id: string): Promise<IUser | null> {
