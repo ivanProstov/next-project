@@ -2,6 +2,7 @@ import { UsersService } from "@/server/module/users/users.service";
 import { CryptoService } from "@/server/module/crypto/crypto.service";
 import { MailerService } from "@/server/module/mailer/mailer.service";
 import { JwtService } from "@/server/module/jwt/jwt.service";
+import { loginUrl, verifyUrl } from "../../../utils/constants";
 
 export class AuthService {
   constructor(
@@ -37,8 +38,63 @@ export class AuthService {
     return user;
   }
 
+  public async checkVerifyTokenOrError(
+    token: string,
+  ): Promise<{ userId: string }> {
+    try {
+      return this.jwt.verify(token);
+    } catch (e) {
+      throw new Error("Invalid or expired toket");
+    }
+  }
+
+  public async verify({
+    token,
+    password,
+    name,
+  }: {
+    token: string;
+    name: string;
+    password: string;
+  }) {
+    try {
+      const { userId } = await this.checkVerifyTokenOrError(token);
+      const currentUser = await this.usersService.getUserByIdOrError(userId);
+      const cryptoPassword = await this.cryptoService.hashPassword(password);
+      const updateUserData = {
+        id: userId,
+        email: currentUser.email,
+        password: cryptoPassword,
+        name: name,
+        token: undefined,
+      };
+      return await this.usersService.updateUser(updateUserData);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
+  // res.redirect(Path.HOME);
+  public async verifyAndRedirect(
+    value: {
+      token: string;
+      name: string;
+      password: string;
+    },
+    redirect: (url: string) => void,
+    // preRedirect: () => Promise<boolean>,
+  ) {
+    try {
+      await this.verify(value);
+      // await preRedirect();
+      redirect(loginUrl);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
   // TODO: перенести метод в класс mailerService
   private getHtml(token: string) {
-    return `<div><a href="http://localhost:3000/verify?token=${token}">Registration</a></div>`;
+    return `<div><a href="http://localhost:${process.env.PORT}${verifyUrl}?token=${token}">Registration</a></div>`;
   }
 }

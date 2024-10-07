@@ -51,8 +51,6 @@ export const Form = () => {
     [openNotification],
   );
 
-  console.log("loading >>> ", loading);
-
   return (
     <form onSubmit={form.handleSubmit(onClickBtn)}>
       <div>

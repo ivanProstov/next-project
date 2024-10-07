@@ -1,4 +1,4 @@
-import { Login as LoginComponents } from "../src/client/pages/login";
+import { Login as LoginComponents } from "@/src/client/pages/login";
 import { GetStaticProps } from "next";
 
 export const getStaticProps: GetStaticProps = async (context) => {

@@ -79,7 +79,7 @@ app.prepare().then(async () => {
   });
 
   // @ts-ignore
-  server.listen(3000, (err: any) => {
+  server.listen(process.env.PORT, (err: any) => {
     if (err) throw err;
     console.log("> Ready on http://localhost:3000");
   });

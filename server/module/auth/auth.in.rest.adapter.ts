@@ -24,6 +24,8 @@ export class AuthInRestAdapter
       { url: "login", method: Method.POST, fn: "login" },
       { url: "logout", method: Method.POST, fn: "logout" },
       { url: "invite", method: Method.POST, fn: "invite" },
+      { url: "checkVerifyToken", method: Method.GET, fn: "checkVerifyToken" },
+      { url: "verify", method: Method.POST, fn: "verify" },
     ];
   }
 
@@ -34,6 +36,32 @@ export class AuthInRestAdapter
       res.status(201).json(true);
     } catch (error) {
       res.status(500).json({ error: "Error invite" });
+    }
+  }
+
+  public async checkVerifyToken(req: Request, res: Response) {
+    // TODO: вынести в services, что бы избавиться от протечки бизнес логики
+    try {
+      const { token } = req.query;
+      const { userId } = await this.authService.checkVerifyTokenOrError(
+        token as string,
+      );
+      const user = await this.usersService.getUserByIdOrError(userId);
+      if (user.token !== token) {
+        res.status(200).json(false);
+      }
+      res.status(200).json(true);
+    } catch {
+      res.status(200).json(false);
+    }
+  }
+
+  public async verify(req: Request, res: Response) {
+    try {
+      await this.authService.verify({ ...req.body, ...req.query });
+      res.status(200).json(true);
+    } catch (e: any) {
+      res.status(500).json({ error: e?.message });
     }
   }
 

@@ -49,7 +49,6 @@ export const Registration = () => {
           return response.json();
         })
         .then((data) => {
-          // push("/login");
           setIsRegistration(!!data);
           setLoading(false);
         })

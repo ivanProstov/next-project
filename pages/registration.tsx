@@ -1,4 +1,4 @@
-import { Registration as RegistrationComponent } from "../src/client/pages/registration";
+import { Registration as RegistrationComponent } from "@/src/client/pages/registration";
 import { GetStaticProps } from "next";
 
 export const getStaticProps: GetStaticProps = async (context) => {
