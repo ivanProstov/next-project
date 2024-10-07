@@ -3,8 +3,8 @@ import { Button } from "antd";
 
 export default function Home() {
   const [data, setData] = useState<{
-    id: string;
-    user: string;
+    userId: string;
+    name: string;
     users: any[];
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,8 +51,8 @@ export default function Home() {
       {loading && <div>...</div>}
       {!loading && (
         <>
-          <div>userId: {data?.id || ""}</div>
-          <div>userId: {data?.user || ""}</div>
+          <div>userId: {data?.userId || ""}</div>
+          <div>name: {data?.name || ""}</div>
           <div>
             users:
             {(data?.users || []).map((user: any) => (

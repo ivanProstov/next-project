@@ -12,5 +12,5 @@ export const middlewareAuthAPI = (
   }
   // если middlewareAuthAPI идет последним, то нужно next()
   // TODO: нужно разобраться почему так рабоатет
-  // next()
+  // next();
 };

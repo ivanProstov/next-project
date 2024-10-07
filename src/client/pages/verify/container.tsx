@@ -1,6 +1,6 @@
 import { SC } from "./ui/styled";
 import { Button, Input, Result, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -13,11 +13,13 @@ import {
 } from "@ant-design/icons";
 import { loginUrl } from "@/utils/constants";
 import { Link } from "@/src/client/components/ui/link";
+import { openNotification } from "@/src/client/common/util/notification";
+import { useRouter } from "next/router";
 
 export const Verify = (props: { verify: boolean }) => {
+  const { query, push } = useRouter();
   const { Title, Text } = Typography;
-
-  const [checkVerify, setCheckVerify] = useState(props.verify);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     formState: { errors },
@@ -53,19 +55,50 @@ export const Verify = (props: { verify: boolean }) => {
     ),
   });
 
+  const onSubmit = useCallback((value: IFormInputs) => {
+    setLoading(true);
+    const queryParams = new URLSearchParams({
+      token: query?.token as string,
+    }).toString();
+    console.log("queryParams >> ", queryParams);
+    fetch(`/api/auth/verify?${queryParams}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-custom-header": "fetch",
+      },
+      body: JSON.stringify({ name: value.name, password: value.password }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        void push(loginUrl);
+      })
+      .catch((error) => {
+        openNotification("error", "Verify error", error.message || "");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <SC.FormWrapper>
       <Title level={1}>Verify</Title>
 
-      {!checkVerify && (
+      {!props.verify && (
         <Result
           status="warning"
           title="The verification token has expired or is invalid."
           extra={<Link $size="24px" href={loginUrl} text={"Login"} />}
         />
       )}
-      {checkVerify && (
-        <form onSubmit={form.handleSubmit(() => {})}>
+      {props.verify && (
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <Controller
               name="name"
@@ -147,7 +180,12 @@ export const Verify = (props: { verify: boolean }) => {
             />
           </div>
           <div>
-            <Button htmlType="submit" type="primary" size="large">
+            <Button
+              loading={loading}
+              htmlType="submit"
+              type="primary"
+              size="large"
+            >
               Registration
             </Button>
           </div>

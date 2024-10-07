@@ -59,7 +59,7 @@ export class AuthInRestAdapter
   public async verify(req: Request, res: Response) {
     try {
       await this.authService.verify({ ...req.body, ...req.query });
-      res.status(200).json(true);
+      return res.status(200).json(true);
     } catch (e: any) {
       res.status(500).json({ error: e?.message });
     }

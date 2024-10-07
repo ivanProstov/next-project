@@ -1,7 +1,6 @@
-import { nameUsersInHeaders } from "../../utils/constants";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { routes } from "../../utils/router-config/routes";
 import { NextFunction, Request, Response } from "express";
+import { loginUrl } from "../../utils/constants";
 
 export function middlewareAuth(
   req: Request,
@@ -11,13 +10,10 @@ export function middlewareAuth(
   // @ts-ignore
   const accessToken = req.session.userId;
 
-  const isAuthenticated = checkAuth(req, accessToken); // Ваша логика проверки аутентификации
+  const isAuthenticated = checkAuth(req, accessToken);
   if (!isAuthenticated) {
-    return res.redirect("/login");
+    return res.redirect(loginUrl);
   }
-  const userInfo = JSON.stringify({ id: accessToken, user: "ivolkov" });
-  req.headers[nameUsersInHeaders] = userInfo;
-  res.setHeader(nameUsersInHeaders, userInfo);
 }
 
 // Функция для проверки аутентификации

@@ -2,7 +2,7 @@ import { UsersService } from "@/server/module/users/users.service";
 import { CryptoService } from "@/server/module/crypto/crypto.service";
 import { MailerService } from "@/server/module/mailer/mailer.service";
 import { JwtService } from "@/server/module/jwt/jwt.service";
-import { loginUrl, verifyUrl } from "../../../utils/constants";
+import { verifyUrl } from "../../../utils/constants";
 
 export class AuthService {
   constructor(
@@ -58,6 +58,9 @@ export class AuthService {
     password: string;
   }) {
     try {
+      if (!password || !name) {
+        throw new Error("not enough data");
+      }
       const { userId } = await this.checkVerifyTokenOrError(token);
       const currentUser = await this.usersService.getUserByIdOrError(userId);
       const cryptoPassword = await this.cryptoService.hashPassword(password);
@@ -66,28 +69,9 @@ export class AuthService {
         email: currentUser.email,
         password: cryptoPassword,
         name: name,
-        token: undefined,
+        token: "",
       };
       return await this.usersService.updateUser(updateUserData);
-    } catch (e: any) {
-      throw new Error(e.message);
-    }
-  }
-
-  // res.redirect(Path.HOME);
-  public async verifyAndRedirect(
-    value: {
-      token: string;
-      name: string;
-      password: string;
-    },
-    redirect: (url: string) => void,
-    // preRedirect: () => Promise<boolean>,
-  ) {
-    try {
-      await this.verify(value);
-      // await preRedirect();
-      redirect(loginUrl);
     } catch (e: any) {
       throw new Error(e.message);
     }

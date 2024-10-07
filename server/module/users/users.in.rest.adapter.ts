@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { nameUsersInHeaders } from "../../../utils/constants";
 import { IEndpointConfig, IServiceInRestAdapter } from "../interface";
 import { Method, ServicesName } from "../constants";
 import User from "../../models/users/users";
@@ -21,9 +20,10 @@ export class UsersInRestAdapter
   }
 
   public getUsers = async (req: Request, res: Response) => {
-    const user = req.get(nameUsersInHeaders);
+    const userId = req.session.userId;
+    const user = await this.usersService.getUserById(userId as string);
     const users = await User.find();
-    res.status(200).json({ ...JSON.parse(user || ""), method: "get", users });
+    res.status(200).json({ userId: user?._id, name: user?.name, users });
   };
 
   public getUser = async (req: Request, res: Response) => {
@@ -50,15 +50,4 @@ export class UsersInRestAdapter
       res.status(500).json({ error: "Error creating user" });
     }
   }
-
-  // public async getSession(req: Request, res: Response) {
-  //   if (req.session.userId) {
-  //     const user = await this.usersService.getUserByIdOrError(
-  //       req.session.userId,
-  //     );
-  //     res.status(200).json(user);
-  //   } else {
-  //     res.status(401).json({ message: "Not authenticated" });
-  //   }
-  // }
 }
