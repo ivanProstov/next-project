@@ -9,6 +9,7 @@ import { Link } from "@/src/client/components/ui/link";
 import { loginUrl } from "@/utils/constants";
 import React, { useCallback, useState } from "react";
 import { openNotification } from "@/src/client/common/util/notification";
+import { apiClient } from "@/src/client/common/util/rest-client";
 
 export const Registration = () => {
   const { Title, Text } = Typography;
@@ -34,20 +35,8 @@ export const Registration = () => {
   const onClickBtn = useCallback(
     (value: IFormInputs) => {
       setLoading(true);
-      fetch("/api/auth/invite", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-custom-header": "fetch",
-        },
-        body: JSON.stringify(value),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
+      apiClient
+        .post<IFormInputs>("/api/auth/invite", value)
         .then((data) => {
           setIsRegistration(!!data);
           setLoading(false);

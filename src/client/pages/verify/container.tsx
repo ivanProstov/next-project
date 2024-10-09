@@ -15,6 +15,7 @@ import { loginUrl } from "@/utils/constants";
 import { Link } from "@/src/client/components/ui/link";
 import { openNotification } from "@/src/client/common/util/notification";
 import { useRouter } from "next/router";
+import { apiClient } from "@/src/client/common/util/rest-client";
 
 export const Verify = (props: { verify: boolean }) => {
   const { query, push } = useRouter();
@@ -57,24 +58,12 @@ export const Verify = (props: { verify: boolean }) => {
 
   const onSubmit = useCallback((value: IFormInputs) => {
     setLoading(true);
-    const queryParams = new URLSearchParams({
-      token: query?.token as string,
-    }).toString();
-    console.log("queryParams >> ", queryParams);
-    fetch(`/api/auth/verify?${queryParams}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-custom-header": "fetch",
-      },
-      body: JSON.stringify({ name: value.name, password: value.password }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+    apiClient
+      .post(
+        "/api/auth/verify",
+        { name: value.name, password: value.password },
+        { params: { token: query?.token } },
+      )
       .then((data) => {
         void push(loginUrl);
       })

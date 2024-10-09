@@ -1,10 +1,10 @@
-import { routes } from "@/utils/router-config/routes";
 import { Link } from "../ui/link";
 import { onLogout } from "./lib/utils/on-logout";
 import { useRouter } from "next/router";
 import { SC } from "./ui/styled";
 import { Button } from "antd";
 import React, { useCallback, useState } from "react";
+import { routes } from "@/utils/router-config/routes";
 
 export const Header = () => {
   const { push } = useRouter();

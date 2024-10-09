@@ -1,5 +1,6 @@
 import { Verify as VerifyComponent } from "@/src/client/pages/verify";
 import { GetServerSideProps } from "next";
+import { apiClient } from "@/src/client/common/util/rest-client";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -8,26 +9,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     token: query?.token as string,
   }).toString();
 
-  const checkVerifyToken = await fetch(
-    `http://localhost:3000/api/auth/checkVerifyToken?${queryParams}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-custom-header": "fetch",
-      },
-    },
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
+  const checkVerifyToken = await apiClient
+    .get("/api/auth/checkVerifyToken", {
+      params: { token: query?.token },
     })
     .then((data) => data);
 
   return {
-    props: { verify: checkVerifyToken ?? false },
+    props: { verify: checkVerifyToken.data ?? false },
   };
 };
 

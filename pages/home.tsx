@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "antd";
+import { apiClient } from "@/src/client/common/util/rest-client";
 
 export default function Home() {
   const [data, setData] = useState<{
@@ -10,33 +11,21 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch("/api/authorized/users/getUsers", {
-      method: "GET",
-      headers: {
-        "x-custom-header": "fetch",
-      },
-    })
-      .then((response) => {
+    apiClient
+      .get("/api/authorized/users/getUsers")
+      .then(({ data }) => {
         setLoading(true);
-        return response.json();
+        console.log("data >>> ", data);
+        setData(data);
       })
-      .then((data) => setData(data))
       .catch((error) => console.error("Error fetching data:", error))
       .finally(() => setLoading(false));
   }, []);
 
   const onClickBtn = () => {
-    fetch("/api/authorized/users/get", {
-      method: "GET",
-      headers: {
-        "x-custom-header": "fetch",
-      },
-    })
-      .then((response) => {
-        console.log("response >>> ", response);
-        return response.json();
-      })
-      .then((data) => console.log("data >>> ", data));
+    apiClient
+      .get("/api/authorized/users/get")
+      .then(({ data }) => console.log("data >>> ", data));
   };
 
   return (

@@ -11,6 +11,7 @@ import { IFormInputs } from "../interfaces";
 import React, { useCallback, useState } from "react";
 import { openNotification } from "@/src/client/common/util/notification";
 import { useRouter } from "next/router";
+import { apiClient } from "@/src/client/common/util/rest-client";
 
 export const Form = () => {
   const {
@@ -24,23 +25,11 @@ export const Form = () => {
   const onClickBtn = useCallback(
     (value: IFormInputs) => {
       setLoading(true);
-      fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-custom-header": "fetch",
-        },
-        body: JSON.stringify(value),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
+      apiClient
+        .post<IFormInputs>("/api/auth/login", value)
         .then((data) => {
-          push("/home");
           setLoading(false);
+          void push("/home");
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
