@@ -11,8 +11,6 @@
     "build:server": "npm run clean:server && tsc -p ./tsconfig.json",
     "start:server": "node ./build/server/server.js",
     "clean:server": "rimraf --path ./dist && rimraf --path ./build",
-    "start:dev:old": "npm run build:server && node ./build/server/server.js",
-    "start:dev:new": "nodemon --watch server --ext ts,js --exec \"npm-run-all build:server start:server\"",
     "start:dev": "nodemon --watch server --ext ts,js --exec \"npm run build:server && npm run start:server\""
   },
   "dependencies": {

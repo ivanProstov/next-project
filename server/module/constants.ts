@@ -9,4 +9,5 @@ export enum Method {
 export enum ServicesName {
   USERS = "users",
   AUTH = "auth",
+  BOARD = "board",
 }

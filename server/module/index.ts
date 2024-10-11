@@ -8,6 +8,8 @@ import { CryptoService } from "./crypto/crypto.service";
 import { AuthService } from "./auth/auth.service";
 import { MailerService } from "./mailer/mailer.service";
 import { JwtService } from "./jwt/jwt.service";
+import { BoardInRestAdapter } from "./board/board.in.rest.adapter";
+import { BoardService } from "./board/board.service";
 
 const cryptoService = new CryptoService();
 const usersService = new UsersService(cryptoService);
@@ -25,9 +27,12 @@ const authInRestAdapter = new AuthInRestAdapter(
   authService,
 );
 
+const boardInRestAdapter = new BoardInRestAdapter(new BoardService());
+
 const serviceAdapters: IServiceInRestAdapter<any>[] = [
   usersInRestAdapter,
   authInRestAdapter,
+  boardInRestAdapter,
 ];
 
 export const initializeEndpoints =
