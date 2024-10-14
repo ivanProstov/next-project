@@ -8,7 +8,10 @@ export interface IComment {
 export interface ITask extends Document {
   title: string;
   description?: string;
+  board: Schema.Types.ObjectId;
+  column: Schema.Types.ObjectId;
   creator: Schema.Types.ObjectId;
   executor?: Schema.Types.ObjectId;
   comments?: IComment[];
+  taskNumber?: string;
 }

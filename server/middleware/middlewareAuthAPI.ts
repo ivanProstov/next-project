@@ -5,7 +5,7 @@ export const middlewareAuthAPI = (
   res: Response,
   next: NextFunction,
 ) => {
-  // @ts-ignore
+  // TODO: добавить проверку на истечение сессии
   const accessToken = req.session.userId;
   if (!accessToken) {
     return res.status(401).json({ error: "Unauthorized" });

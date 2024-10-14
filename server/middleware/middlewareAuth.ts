@@ -7,9 +7,8 @@ export function middlewareAuth(
   res: Response,
   next: NextFunction,
 ) {
-  // @ts-ignore
+  // TODO: добавить проверку на истечение сессии
   const accessToken = req.session.userId;
-
   const isAuthenticated = checkAuth(req, accessToken);
   if (!isAuthenticated) {
     return res.redirect(loginUrl);
