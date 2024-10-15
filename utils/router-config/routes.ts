@@ -1,11 +1,13 @@
 const formatPath = () => {
   const HOME = "/home";
   const ABOUT = "/about";
+  const BOARD = "/board";
   // const LOGIN = "/login";
   // const REGISTRATION = "/registration";
   return {
     HOME,
     ABOUT,
+    BOARD,
   };
 };
 
@@ -30,5 +32,9 @@ export const routes = [
   {
     title: "About",
     path: Path.ABOUT,
+  },
+  {
+    title: "Board",
+    path: Path.BOARD,
   },
 ];

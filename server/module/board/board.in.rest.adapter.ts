@@ -17,7 +17,7 @@ export class BoardInRestAdapter
     return [
       { url: "getBoards", method: Method.GET, fn: "getBoards" },
       { url: "getBoardInfo", method: Method.GET, fn: "getBoardInfo" },
-      { url: "getBoardById", method: Method.GET, fn: "getBoardById" },
+      // { url: "getBoardById", method: Method.GET, fn: "getBoardById" },
       { url: "createBoard", method: Method.POST, fn: "createBoard" },
       { url: "updateBoard", method: Method.PUT, fn: "updateBoard" },
       { url: "getColumns", method: Method.GET, fn: "getColumns" },
@@ -55,6 +55,7 @@ export class BoardInRestAdapter
     }
   }
 
+  // TODO: проверить нужен ли этот метод публично
   public async getBoardById(
     req: Request<unknown, unknown, unknown, { id: string }>,
     res: Response,

@@ -6,6 +6,7 @@ export interface IComment {
 }
 
 export interface ITask extends Document {
+  _id: string;
   title: string;
   description?: string;
   board: Schema.Types.ObjectId;
@@ -14,4 +15,5 @@ export interface ITask extends Document {
   executor?: Schema.Types.ObjectId;
   comments?: IComment[];
   taskNumber?: string;
+  isUserInBoard(userId?: string): Promise<boolean>;
 }

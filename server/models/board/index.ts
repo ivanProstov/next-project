@@ -8,6 +8,10 @@ const boardSchema = new Schema<IBoard>({
   columns: [{ type: Schema.Types.ObjectId, ref: "Column" }],
 });
 
+boardSchema.methods.isUserInBoard = async function (userId: string) {
+  return this?.users.some((user: any) => user._id.toHexString() === userId);
+};
+
 const Board = model<IBoard>("Board", boardSchema);
 
 export default Board;

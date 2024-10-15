@@ -28,27 +28,20 @@ export class BoardService {
 
   public async getBoardWithUsersAndColumns(id: string, userId?: string) {
     try {
-      const board = (await Board.findById(id)
+      const board = await Board.findById(id)
         .populate({
           path: "users",
           select: "_id name",
         })
         .populate({ path: "columns", select: "_id name" })
-        .exec()) as unknown as Omit<IBoard, "users"> & {
-        users: Array<{ _id: any; name: string }>;
-      };
+        .exec();
 
-      const userExists = board?.users.some(
-        (user) => user._id.toHexString() === userId,
-      );
-
-      if (!userExists || !board) {
+      if (!board || !(await board.isUserInBoard(userId))) {
         throw new Error("Board not found");
       }
 
-      // TODO: поправить
+      // TODO: проверить что возвращается
       const tasks = await Task.find({ board: { $in: [id] } });
-      // @ts-ignore
       const _id = board._id;
       const name = board.name;
       const prefix = board.prefix;
@@ -121,8 +114,7 @@ export class BoardService {
   }
 
   public async getTask({ id, userId }: { id: string; userId?: string }) {
-    // TODO: перейти на использование getTaskByIdOrError
-    const task = (await Task.findById(id)
+    const task = await Task.findById(id)
       .populate({
         path: "board",
         select: "_id users columns",
@@ -136,15 +128,9 @@ export class BoardService {
       })
       .populate({ path: "creator", select: "_id name" })
       .populate({ path: "column", select: "_id name" })
-      .exec()) as unknown as Omit<ITask, "board"> & {
-      board: { users: any[] };
-    };
+      .exec();
 
-    const isUser = task?.board?.users.some(
-      (item) => item._id.toHexString() === userId,
-    );
-
-    if (!task || !isUser) {
+    if (!task || !(await task.isUserInBoard(userId))) {
       throw new Error("Task not found");
     }
 

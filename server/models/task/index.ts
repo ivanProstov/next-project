@@ -27,6 +27,12 @@ taskSchema.pre("save", async function (next) {
   next();
 });
 
+taskSchema.methods.isUserInBoard = async function (userId: string) {
+  return this?.board?.users.some(
+    (user: any) => user._id.toHexString() === userId,
+  );
+};
+
 const Task = model<ITask>("Task", taskSchema);
 
 export default Task;
