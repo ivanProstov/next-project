@@ -81,7 +81,7 @@ export class AuthInRestAdapter
 
   public async login(req: Request, res: Response) {
     try {
-      const { email, password, isRememberMe } = req.body;
+      const { email, password, rememberMe } = req.body;
       const user = await this.usersService.getUserByEmailOrError(email);
       const isCheckPassword = await this.cryptoService.checkPassword(
         password,
@@ -98,7 +98,7 @@ export class AuthInRestAdapter
         }
 
         req.session.userId = user._id;
-        req.session.cookie.maxAge = isRememberMe
+        req.session.cookie.maxAge = rememberMe
           ? 7 * 24 * 60 * 60 * 1000
           : 60 * 60 * 1000; // Устанавливаем время жизни сессии
 

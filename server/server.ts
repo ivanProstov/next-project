@@ -42,7 +42,6 @@ app.prepare().then(async () => {
         mongoUrl: MONGO_URI,
         collectionName: "sessions",
       }),
-      // saveUninitialized: true,
       saveUninitialized: false,
       cookie: {
         secure: !dev,
