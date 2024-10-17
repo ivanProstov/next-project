@@ -22,7 +22,7 @@ export class UsersInRestAdapter
   public getUsers = async (req: Request, res: Response) => {
     const userId = req.session.userId;
     const user = await this.usersService.getUserById(userId as string);
-    const users = await User.find();
+    const users = await User.find({}, "_id name email");
     res.status(200).json({ userId: user?._id, name: user?.name, users });
   };
 

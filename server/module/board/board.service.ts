@@ -75,7 +75,10 @@ export class BoardService {
   }
 
   public async getBoards(userId?: string) {
-    return Board.find({ users: { $in: [userId] } }, "name _id");
+    return Board.find(
+      { users: { $in: [userId] } },
+      "name _id description prefix users columns",
+    );
   }
 
   public async createColumn(value: IColumn) {

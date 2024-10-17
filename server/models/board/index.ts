@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 
 const boardSchema = new Schema<IBoard>({
   name: { type: String, required: true },
+  description: { type: String },
   prefix: { type: String, required: true, unique: true },
   users: [{ type: Schema.Types.ObjectId, ref: "User" }],
   columns: [{ type: Schema.Types.ObjectId, ref: "Column" }],

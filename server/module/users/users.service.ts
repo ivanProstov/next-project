@@ -36,7 +36,7 @@ export class UsersService {
   }
 
   public async getUserById(id: string): Promise<IUser | null> {
-    return User.findOne({ _id: id });
+    return User.findOne({ _id: id }, "_id name email");
   }
 
   public async getUserByIdOrError(id: string): Promise<IUser> {
