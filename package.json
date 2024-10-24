@@ -11,7 +11,9 @@
     "build:server": "npm run clean:server && tsc -p ./tsconfig.json",
     "start:server": "node ./build/server/server.js",
     "clean:server": "rimraf --path ./dist && rimraf --path ./build",
-    "start:dev": "nodemon --watch server --ext ts,js --exec \"npm run build:server && npm run start:server\""
+    "start:dev": "nodemon --watch server --ext ts,js --exec \"npm run build:server && npm run start:server\"",
+    "start:prod": "NODE_ENV=production npm run build:server && npm run start:server"
+
   },
   "dependencies": {
     "@ant-design/icons": "5.5.1",

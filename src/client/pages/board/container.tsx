@@ -1,17 +1,17 @@
 import React, { useMemo } from "react";
 import { Col, Segmented } from "antd";
-import { EditOutlined } from "@ant-design/icons";
 import { SC } from "./ui/styled";
 import { SegmentedType } from "./constants";
 import { Board as BoardComponent } from "./components/board";
 import { useRouter } from "next/router";
+import { EditIcon } from "@/src/client/components/icons";
 
 export const Board = () => {
   const router = useRouter();
   const { query } = router;
 
   const segmentedType = useMemo(
-    () => query?.type || SegmentedType.EMPTY,
+    () => query?.type || SegmentedType.BOARDS,
     [query, SegmentedType],
   );
   const addQueryParam = (value: string) => {
@@ -30,6 +30,7 @@ export const Board = () => {
       },
     );
   };
+
   return (
     <>
       <SC.RowWrapper>
@@ -41,12 +42,12 @@ export const Board = () => {
                 {
                   label: "Boards",
                   value: SegmentedType.BOARDS,
-                  icon: <EditOutlined />,
+                  icon: <EditIcon />,
                 },
                 {
                   label: "Columns",
                   value: SegmentedType.COLUMNS,
-                  icon: <EditOutlined />,
+                  icon: <EditIcon />,
                 },
               ]}
               value={segmentedType}

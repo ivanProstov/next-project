@@ -3,12 +3,12 @@ import { initials } from "@dicebear/collection";
 import { useGetBoards } from "../../lib/hooks/use-get-boards";
 import React, { useMemo, useState } from "react";
 import { IBoardsData } from "../../interfaces";
-import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Col, Popover, Result, Tooltip } from "antd";
 import { SC } from "../../ui/styled";
 import { Link } from "@/src/client/components/ui/link";
 import { Path } from "@/utils/router-config/routes";
 import { CreateUpdateBoard } from "../create-update-board";
+import { EditIcon, CreateIcon } from "@/src/client/components/icons";
 
 const getAvatar = (title: string) => {
   const avatar = createAvatar(initials, {
@@ -52,7 +52,7 @@ export const Board = () => {
 
   const actions: (id: IBoardsData) => React.ReactNode[] = (
     data: IBoardsData,
-  ) => [<EditOutlined onClick={() => showDrawer(data)} key="edit" />];
+  ) => [<EditIcon onClick={() => showDrawer(data)} key="edit" />];
 
   if (error) {
     return (
@@ -130,7 +130,7 @@ export const Board = () => {
             type="primary"
             onClick={() => setOpenEdit(true)}
           >
-            <PlusCircleOutlined />
+            <CreateIcon />
           </Button>
         </Tooltip>
       </SC.ButtonWrapper>
