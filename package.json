@@ -5,14 +5,14 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "next lint",
-    "dev": "next dev",
+    "dev:next": "next dev",
     "build:next": "next build",
     "start": "next start",
     "build:server": "npm run clean:server && tsc -p ./tsconfig.json",
     "start:server": "node ./build/server/server.js",
     "clean:server": "rimraf --path ./dist && rimraf --path ./build",
-    "start:dev": "nodemon --watch server --ext ts,js --exec \"npm run build:server && npm run start:server\"",
-    "start:prod": "cross-env NODE_ENV=production npm run build:server && npm run build:next && npm run start:server"
+    "dev": "nodemon --watch server --ext ts,js --exec \"npm run build:server && npm run start:server\"",
+    "prod": "cross-env NODE_ENV=production npm run build:server && npm run build:next && npm run start:server"
   },
   "dependencies": {
     "@ant-design/icons": "5.5.1",

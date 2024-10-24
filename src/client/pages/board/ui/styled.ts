@@ -28,6 +28,7 @@ const RowWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 42px;
+  flex-direction: column;
 `;
 
 const Row = styled(RowComponent)`
@@ -35,4 +36,11 @@ const Row = styled(RowComponent)`
   width: 100%;
   margin: auto;
 `;
-export const SC = { ButtonWrapper, Description, RowWrapper, Row };
+
+const SpinWrapper = styled(RowWrapper)`
+  height: inherit;
+  > * {
+    top: -25%;
+  }
+`;
+export const SC = { ButtonWrapper, Description, RowWrapper, Row, SpinWrapper };

@@ -3,6 +3,7 @@ import { Col, Segmented } from "antd";
 import { SC } from "./ui/styled";
 import { SegmentedType } from "./constants";
 import { Board as BoardComponent } from "./components/board";
+import { Columns as ColumnsComponent } from "./components/columns";
 import { useRouter } from "next/router";
 import { EditIcon } from "@/src/client/components/icons";
 
@@ -57,9 +58,7 @@ export const Board = () => {
         </SC.Row>
       </SC.RowWrapper>
       {segmentedType === SegmentedType.BOARDS && <BoardComponent />}
-      {segmentedType === SegmentedType.COLUMNS && (
-        <SC.RowWrapper>columns</SC.RowWrapper>
-      )}
+      {segmentedType === SegmentedType.COLUMNS && <ColumnsComponent />}
     </>
   );
 };

@@ -5,7 +5,11 @@ export const AuthLayout: React.FC<ILayoutProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main
+        style={{ height: "100%", display: "flex", flexDirection: "column" }}
+      >
+        {children}
+      </main>
     </>
   );
 };
