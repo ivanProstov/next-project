@@ -1,4 +1,4 @@
-import next from "next";
+import nextBuilder from "next";
 import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -12,11 +12,18 @@ import MongoStore from "connect-mongo";
 import { setupServer } from "./module";
 import session from "express-session";
 import { blockBrowserAccess } from "./middleware/blockBrowserAccess";
+import dotenv from "dotenv";
 
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+import process from "process";
+
+dotenv.config();
+const dev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+const app = nextBuilder({
+  dev,
+});
 const handle = app.getRequestHandler();
 
+// TODO: вынести в переменное окружение
 const MONGO_URI =
   "mongodb://root:297ugbT1DM@localhost:27017/glow?authSource=admin&authMechanism=SCRAM-SHA-1&directConnection=true";
 
