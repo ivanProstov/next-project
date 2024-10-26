@@ -20,6 +20,7 @@ const Ul = styled.ul`
 const Nav = styled.nav`
   display: flex;
   align-items: center;
+  gap: 20px;
   ul {
     margin: 0;
   }

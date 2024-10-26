@@ -1,5 +1,3 @@
-import { createAvatar } from "@dicebear/core";
-import { initials } from "@dicebear/collection";
 import { useGetBoards } from "../../lib/hooks/use-get-boards";
 import React, { useMemo, useState } from "react";
 import { IBoardsData } from "../../interfaces";
@@ -9,13 +7,7 @@ import { Link } from "@/src/client/components/ui/link";
 import { Path } from "@/utils/router-config/routes";
 import { CreateUpdateBoard } from "../create-update-board";
 import { EditIcon, CreateIcon } from "@/src/client/components/icons";
-
-const getAvatar = (title: string) => {
-  const avatar = createAvatar(initials, {
-    seed: title,
-  });
-  return avatar.toDataUri();
-};
+import { getAvatar } from "@/src/client/common/util/get-avatar";
 
 export const Board = () => {
   const { loading, data, error } = useGetBoards();
