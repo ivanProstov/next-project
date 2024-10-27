@@ -1,9 +1,9 @@
 import { Col, Input, Row, Select, Tag, Form, Typography } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
 import React, { useCallback } from "react";
-import { IColumnsData } from "@/src/client/common/hooks/use-get-columns/interfaces";
 import { IUsersData } from "@/src/client/common/hooks/use-get-users/interfaces";
 import { IBoardsData } from "@/src/client/pages/board/interfaces";
+import { IColumnsData } from "@/src/client/common/state/columns/interfaces";
 
 interface IFormComponentProps {
   isEdit: string | false | undefined;

@@ -1,17 +1,16 @@
 import { SC } from "../../ui/styled";
-import { useGetColumns } from "@/src/client/common/hooks/use-get-columns";
 import { Col, Spin } from "antd";
 import React, { useEffect } from "react";
 import { InputAndText } from "@/src/client/components/ui/input-and-text";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useValidationSchema } from "./lib/hooks/use-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IColumnsData } from "@/src/client/common/hooks/use-get-columns/interfaces";
-import { useUpdateColumn } from "./lib/hooks/use-update-column";
+import { useColumnsStore } from "@/src/client/common/state/columns/store";
+import { IColumnsData } from "@/src/client/common/state/columns/interfaces";
 
 export const Columns = () => {
-  const { data: dataColumns, loading: loadingColumns } = useGetColumns();
-  const { update: updateColumns } = useUpdateColumn();
+  const { actions, data: columnsStore } = useColumnsStore((state) => state);
+  const { data: dataColumns, loading: loadingColumns } = columnsStore;
 
   const validationSchema = useValidationSchema();
 
@@ -28,6 +27,10 @@ export const Columns = () => {
     control,
     name: "columns",
   });
+
+  useEffect(() => {
+    void actions.getColumns();
+  }, []);
 
   useEffect(() => {
     if (dataColumns) {
@@ -67,8 +70,8 @@ export const Columns = () => {
                       onOk={() => {
                         void trigger(`columns.[${index}].name` as "columns");
                         return handleSubmit(() => {
-                          return updateColumns({
-                            _id: item._id,
+                          return actions.updateColumns({
+                            id: item._id,
                             name: fieldValue,
                           });
                         })()

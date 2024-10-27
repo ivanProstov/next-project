@@ -2,7 +2,6 @@ import { Button, Drawer, Space } from "antd";
 import React, { useEffect } from "react";
 import { IBoardsData } from "../../interfaces";
 import { FormProvider, useForm } from "react-hook-form";
-import { useGetColumns } from "@/src/client/common/hooks/use-get-columns";
 import { useGetUsers } from "@/src/client/common/hooks/use-get-users";
 import { ICreateUpdateBoardProps } from "./interfaces";
 import { useUpdateBoards } from "@/src/client/pages/board/lib/hooks/use-update-boards";
@@ -10,21 +9,28 @@ import { useCreateBoards } from "@/src/client/pages/board/lib/hooks/use-create-b
 import { useValidationSchema } from "./lib/hooks/use-validation-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormComponent } from "./ui/form";
+import { useColumnsStore } from "@/src/client/common/state/columns/store";
 
 export const CreateUpdateBoard = ({
   data,
   onClose,
   setUpdateBoard,
 }: ICreateUpdateBoardProps) => {
-  const { data: dataColumns, loading: loadingColumns } = useGetColumns();
+  const { actions, data: columnsStore } = useColumnsStore((state) => state);
+  const { data: dataColumns, loading: loadingColumns } = columnsStore;
   const { data: dataUsers, loading: loadingUsers } = useGetUsers();
   const { create: createBoard } = useCreateBoards();
   const { update: updateBoard } = useUpdateBoards();
   const schema = useValidationSchema();
 
   const form = useForm<IBoardsData>({
+    // @ts-ignore
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    void actions.getColumns();
+  }, []);
 
   const isEdit = typeof data !== "boolean" && data?._id;
 
